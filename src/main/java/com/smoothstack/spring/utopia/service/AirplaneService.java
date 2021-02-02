@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Component
 public class AirplaneService {
@@ -24,6 +25,18 @@ public class AirplaneService {
         }
 
         return airplane;
+    }
+
+    public List<Airplane> getAirplanesByType(AirplaneType type)
+    {
+        List<Airplane> airplanes = null;
+        try {
+            airplanes = airplaneDao.getAirplanesByType(type);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return airplanes;
     }
 
 }
