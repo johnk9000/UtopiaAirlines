@@ -44,19 +44,25 @@ public class AirplaneDao {
 
     }
 
-    public List<Airplane> getAirplanesByType(AirplaneType type) throws ClassNotFoundException, SQLException {
+    public List<Airplane> getAirplanesByType(int typeId) throws ClassNotFoundException, SQLException {
         //set up driver and connection
         Class.forName(driver);
         Connection conn = DriverManager.getConnection(url, username, password);
 
         PreparedStatement prepStmt = conn.prepareStatement("SELECT * FROM airplane WHERE type_id = ?");
-        prepStmt.setInt(1, type.getId());
+        prepStmt.setInt(1, typeId);
         ResultSet rs = prepStmt.executeQuery();
+        prepStmt = conn.prepareStatement("SELECT * FROM airplane_type WHERE id = ?");
+        prepStmt.setInt(1, typeId);
+        ResultSet rs2 = prepStmt.executeQuery();
         List<Airplane> airplanes = new ArrayList<>();
+        AirplaneType type = new AirplaneType();
         while (rs.next())
         {
             Airplane airplane = new Airplane();
             airplane.setId(rs.getInt("id"));
+            type.setId(typeId);
+            type.setMaxCapacity(rs2.getInt("max_capacity"));
             airplane.setType(type);
             airplanes.add(airplane);
         }

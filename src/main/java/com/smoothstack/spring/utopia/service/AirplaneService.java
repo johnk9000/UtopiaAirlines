@@ -27,11 +27,11 @@ public class AirplaneService {
         return airplane;
     }
 
-    public List<Airplane> getAirplanesByType(AirplaneType type)
+    public List<Airplane> getAirplanesByType(int typeId)
     {
         List<Airplane> airplanes = null;
         try {
-            airplanes = airplaneDao.getAirplanesByType(type);
+            airplanes = airplaneDao.getAirplanesByType(typeId);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

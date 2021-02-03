@@ -17,14 +17,15 @@ public class AirplaneController {
     @Autowired
     private AirplaneService airplaneService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/airplanes/{planeId}")
+    @RequestMapping(method = RequestMethod.GET, path = "/airplane/{planeId}")
     public Airplane getAirplaneById(@PathVariable int planeId)
     {
         return airplaneService.getAirplaneById(planeId);
     }
 
-    public List<Airplane> getAirplaneByType(AirplaneType type)
+    @RequestMapping(method = RequestMethod.GET, path = "/airplanes/{typeId}")
+    public List<Airplane> getAirplaneByType(@PathVariable int typeId)
     {
-        return airplaneService.getAirplanesByType(type);
+        return airplaneService.getAirplanesByType(typeId);
     }
 }
