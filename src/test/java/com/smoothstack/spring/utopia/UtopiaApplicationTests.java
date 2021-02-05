@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = UtopiaApplication.class)
 
 class UtopiaApplicationTests {
@@ -39,17 +41,19 @@ class UtopiaApplicationTests {
 		AirplaneDto airplaneDto = new AirplaneDto();
 		airplaneDto.setMaxCapacity(100);
 
-		airportController.createAirport(airportDto);
-		airportController.createAirport(airportDto1);
-		airplaneController.createAirplane(airplaneDto);
+		Long id = airportController.createAirport(airportDto).getBody();
+		Long id2 = airportController.createAirport(airportDto1).getBody();
+		Long id3 = airplaneController.createAirplane(airplaneDto).getBody();
 
 		FlightDto flightDto = new FlightDto();
-		flightDto.setOriginId(airportDto.getId());
-		flightDto.setDestinationId(airportDto1.getId());
-		flightDto.setAirplaneId(airplaneDto.getId());
+		flightDto.setOriginId(id);
+		flightDto.setDestinationId(id2);
+		flightDto.setAirplaneId(id3);
 		flightDto.setFilledSeats(50);
 
 		flightController.createFlight(flightDto);
+
+		assertEquals(2, 2);
 	}
 
 }

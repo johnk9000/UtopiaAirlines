@@ -14,6 +14,11 @@ public class FlightDtoMapper {
     @Autowired
     private AirplaneService airplaneService;
 
+    public FlightDtoMapper(AirportService airportService, AirplaneService airplaneService) {
+        this.airportService = airportService;
+        this.airplaneService = airplaneService;
+    }
+
     public Flight map(FlightDto flightDto)
     {
         Flight flight = new Flight();
