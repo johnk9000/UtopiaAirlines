@@ -1,18 +1,11 @@
-package com.smoothstack.spring.utopia.entity;
+package com.smoothstack.spring.utopia.dto;
 
 import lombok.Data;
 
-import javax.persistence.*;
-
 @Data
-@Entity
-@Table(name = "airplane")
-public class Airplane {
+public class AirplaneDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Integer maxCapacity;
 
     public Long getId() {

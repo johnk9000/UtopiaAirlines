@@ -1,42 +1,31 @@
 package com.smoothstack.spring.utopia.service;
 
-import com.smoothstack.spring.utopia.dao.AirplaneDao;
+import com.smoothstack.spring.utopia.repository.AirplaneRepository;
 import com.smoothstack.spring.utopia.entity.Airplane;
-import com.smoothstack.spring.utopia.entity.AirplaneType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-@Component
+@Service
 public class AirplaneService {
 
     @Autowired
-    private AirplaneDao airplaneDao;
+    private AirplaneRepository airplaneRepository;
 
-    public Airplane getAirplaneById(int planeId)
+    public Optional<Airplane> getAirplaneById(Long id)
     {
-        Airplane airplane = null;
-        try {
-            airplane = airplaneDao.getAirplaneById(planeId);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        return airplane;
+        return airplaneRepository.findById(id);
     }
 
-    public List<Airplane> getAirplanesByType(int typeId)
+    public List<Airplane> getAllAirplanes()
     {
-        List<Airplane> airplanes = null;
-        try {
-            airplanes = airplaneDao.getAirplanesByType(typeId);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        return airplanes;
+        return airplaneRepository.findAll();
     }
 
+    public Airplane createAirplane(Airplane airplane)
+    {
+        return airplaneRepository.save(airplane);
+    }
 }

@@ -1,31 +1,48 @@
 package com.smoothstack.spring.utopia.controller;
 
+import com.smoothstack.spring.utopia.dto.AirplaneDto;
 import com.smoothstack.spring.utopia.entity.Airplane;
-import com.smoothstack.spring.utopia.entity.AirplaneType;
+import com.smoothstack.spring.utopia.mapper.AirplaneDtoMapper;
 import com.smoothstack.spring.utopia.service.AirplaneService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/airplane")
 public class AirplaneController {
 
     @Autowired
     private AirplaneService airplaneService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/airplane/{planeId}")
-    public Airplane getAirplaneById(@PathVariable int planeId)
+    @GetMapping({"/{id}"})
+    public ResponseEntity<Airplane> getAirplaneById(@PathVariable Long id)
     {
-        return airplaneService.getAirplaneById(planeId);
+        return ResponseEntity.of(airplaneService.getAirplaneById(id));
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/airplanes/{typeId}")
-    public List<Airplane> getAirplaneByType(@PathVariable int typeId)
+    @GetMapping
+    public ResponseEntity<List<Airplane>> getAllAirplanes()
     {
-        return airplaneService.getAirplanesByType(typeId);
+        List<Airplane> planes = airplaneService.getAllAirplanes();
+        if(planes.size() == 0)
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(planes);
     }
+
+    @PostMapping
+    public ResponseEntity<Long> createAirplane(@Valid @RequestBody AirplaneDto airplaneDto)
+    {
+        AirplaneDtoMapper airplaneDtoMapper= new AirplaneDtoMapper();
+        Airplane airplane = airplaneDtoMapper.map(airplaneDto);
+        Airplane createdAirplane = airplaneService.createAirplane(airplane);
+        return ResponseEntity.status(201).body(createdAirplane.getId());
+
+    }
+
+
 }
