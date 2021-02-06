@@ -2,23 +2,23 @@ package com.smoothstack.spring.utopia.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
+
 @Data
 public class FlightDto {
 
-    private Long id;
-
+    @NotNull(message = "Origin airport number is required")
     private Long originId;
+
+    @NotNull(message = "Destination airport number is required")
     private Long destinationId;
+
+    @NotNull(message = "Airplane number is required")
     private Long airplaneId;
+
+    @NotNull(message = "Number of filled seats is required")
     private Integer filledSeats;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getOriginId() {
         return originId;

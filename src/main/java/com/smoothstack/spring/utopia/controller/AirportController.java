@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/airport")
@@ -43,5 +44,31 @@ public class AirportController {
         Airport airport = airportDtoMapper.map(airportDto);
         Airport createdAirport = airportService.createAirport(airport);
         return ResponseEntity.status(201).body(createdAirport.getId());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAirport(@PathVariable Long id, @Valid @RequestBody AirportDto airportDto)
+    {
+        if (id == null)
+            return ResponseEntity.badRequest().body(Map.of("message", "Airport ID is required for update"));
+
+        AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
+        Airport airportToUpdate = airportDtoMapper.map(airportDto);
+        airportToUpdate.setId(id);
+        try{
+            Airport updatedAirport = airportService.updateAirport(airportToUpdate);
+            return ResponseEntity.ok(updatedAirport);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAirport(@PathVariable Long id)
+    {
+        airportService.deleteAirport(id);
+        return ResponseEntity.noContent().build();
     }
 }

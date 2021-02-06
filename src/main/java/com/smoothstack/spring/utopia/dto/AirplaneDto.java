@@ -2,19 +2,13 @@ package com.smoothstack.spring.utopia.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class AirplaneDto {
 
-    private Long id;
+    @NotNull(message = "Max capacity required")
     private Integer maxCapacity;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Integer getMaxCapacity() {
         return maxCapacity;

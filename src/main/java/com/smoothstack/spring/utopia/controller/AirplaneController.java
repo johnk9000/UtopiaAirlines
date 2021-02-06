@@ -2,7 +2,9 @@ package com.smoothstack.spring.utopia.controller;
 
 import com.smoothstack.spring.utopia.dto.AirplaneDto;
 import com.smoothstack.spring.utopia.entity.Airplane;
+import com.smoothstack.spring.utopia.entity.Flight;
 import com.smoothstack.spring.utopia.mapper.AirplaneDtoMapper;
+import com.smoothstack.spring.utopia.mapper.FlightDtoMapper;
 import com.smoothstack.spring.utopia.service.AirplaneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/airplane")
@@ -42,6 +45,32 @@ public class AirplaneController {
         Airplane createdAirplane = airplaneService.createAirplane(airplane);
         return ResponseEntity.status(201).body(createdAirplane.getId());
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAirplane(@PathVariable Long id, @Valid @RequestBody AirplaneDto airplaneDto)
+    {
+        if (id == null)
+            return ResponseEntity.badRequest().body(Map.of("message", "Airplane ID is required for update"));
+
+        AirplaneDtoMapper airplaneDtoMapper = new AirplaneDtoMapper();
+        Airplane airplaneToUpdate = airplaneDtoMapper.map(airplaneDto);
+        airplaneToUpdate.setId(id);
+        try{
+            Airplane updatedAirplane = airplaneService.updateAirplane(airplaneToUpdate);
+            return ResponseEntity.ok(updatedAirplane);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAirplane(@PathVariable Long id)
+    {
+        airplaneService.deleteAirplane(id);
+        return ResponseEntity.noContent().build();
     }
 
 

@@ -2,21 +2,17 @@ package com.smoothstack.spring.utopia.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
 public class AirportDto {
 
-    private Long id;
-
+    @NotBlank(message = "City is mandatory")
     private String city;
-    private Long iataId;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @NotBlank(message = "Iata Id is mandatory")
+    private String iataId;
 
     public String getCity() {
         return city;
@@ -26,11 +22,11 @@ public class AirportDto {
         this.city = city;
     }
 
-    public Long getIataId() {
+    public String getIataId() {
         return iataId;
     }
 
-    public void setIataId(Long iataId) {
+    public void setIataId(String iataId) {
         this.iataId = iataId;
     }
 }

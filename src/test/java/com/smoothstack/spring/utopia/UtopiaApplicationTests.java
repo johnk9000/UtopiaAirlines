@@ -32,11 +32,11 @@ class UtopiaApplicationTests {
 	{
 		AirportDto airportDto = new AirportDto();
 		airportDto.setCity("San Diego");
-		airportDto.setIataId(120L);
+		airportDto.setIataId("SAN");
 
 		AirportDto airportDto1 = new AirportDto();
 		airportDto1.setCity("Los Angeles");
-		airportDto1.setIataId(125L);
+		airportDto1.setIataId("LAX");
 
 		AirplaneDto airplaneDto = new AirplaneDto();
 		airplaneDto.setMaxCapacity(100);

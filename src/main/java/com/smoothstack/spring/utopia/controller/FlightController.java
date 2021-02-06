@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/flight")
@@ -50,4 +51,31 @@ public class FlightController {
         Flight createdFlight = flightService.createFlight(flight);
         return ResponseEntity.status(201).body(createdFlight.getId());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateFlight(@PathVariable Long id, @Valid @RequestBody FlightDto flightDto)
+    {
+        if (id == null)
+            return ResponseEntity.badRequest().body(Map.of("message", "Flight ID is required for update"));
+
+        FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportService, airplaneService);
+        Flight flightToUpdate = flightDtoMapper.map(flightDto);
+        flightToUpdate.setId(id);
+        try{
+            Flight updatedFlight = flightService.updateFlight(flightToUpdate);
+            return ResponseEntity.ok(updatedFlight);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFlight(@PathVariable Long id)
+    {
+        flightService.deleteFlight(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

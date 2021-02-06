@@ -14,7 +14,7 @@ public class Airport {
     private Long id;
 
     private String city;
-    private Long iataId;
+    private String iataId;
 
     public Long getId() {
         return id;
@@ -32,11 +32,11 @@ public class Airport {
         this.city = city;
     }
 
-    public Long getIataId() {
+    public String getIataId() {
         return iataId;
     }
 
-    public void setIataId(Long iataId) {
+    public void setIataId(String iataId) {
         this.iataId = iataId;
     }
 }
