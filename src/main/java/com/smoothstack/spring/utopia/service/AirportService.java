@@ -1,6 +1,7 @@
 package com.smoothstack.spring.utopia.service;
 
 import com.smoothstack.spring.utopia.entity.Airport;
+import com.smoothstack.spring.utopia.entity.Flight;
 import com.smoothstack.spring.utopia.repository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class AirportService {
 
     @Autowired
     private AirportRepository airportRepository;
+
+    @Autowired
+    private FlightService flightService;
 
     public Optional<Airport> getAirportById(Long id)
     {
@@ -48,5 +52,22 @@ public class AirportService {
         if(airportToDelete.isPresent())
             airportRepository.delete(airportToDelete.get());
 
+    }
+
+    public boolean airportInFlight(Long id)
+    {
+        Optional<Airport> optionalAirport = getAirportById(id);
+        if(optionalAirport.isPresent())
+        {
+            Airport airport = optionalAirport.get();
+            for(Flight flight : flightService.getAllFlights())
+            {
+                if((airport.getId() == flight.getOrigin().getId()) ||
+                        (airport.getId() == flight.getDestination().getId()))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

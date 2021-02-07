@@ -69,6 +69,8 @@ public class AirplaneController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAirplane(@PathVariable Long id)
     {
+        if(airplaneService.airplaneInFlight(id))
+            return ResponseEntity.status(405).body("Can't delete airplane in flight");
         airplaneService.deleteAirplane(id);
         return ResponseEntity.noContent().build();
     }

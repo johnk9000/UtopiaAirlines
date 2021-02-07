@@ -1,5 +1,6 @@
 package com.smoothstack.spring.utopia.service;
 
+import com.smoothstack.spring.utopia.entity.Flight;
 import com.smoothstack.spring.utopia.repository.AirplaneRepository;
 import com.smoothstack.spring.utopia.entity.Airplane;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class AirplaneService {
 
     @Autowired
     private AirplaneRepository airplaneRepository;
+
+    @Autowired
+    private FlightService flightService;
 
     public Optional<Airplane> getAirplaneById(Long id)
     {
@@ -47,5 +51,24 @@ public class AirplaneService {
         Optional<Airplane> airplaneToDelete = getAirplaneById(id);
         if(airplaneToDelete.isPresent())
             airplaneRepository.delete(airplaneToDelete.get());
+    }
+
+    public boolean airplaneInFlight(Long id)
+    {
+        Optional<Airplane> optionalAirplane = getAirplaneById(id);
+        if(optionalAirplane.isPresent())
+        {
+            Airplane airplane = optionalAirplane.get();
+            for(Flight flight : flightService.getAllFlights())
+            {
+                if(airplane.getId() == flight.getAirplane().getId())
+                    return true;
+            }
+
+        }
+
+        return false;
+
+
     }
 }
