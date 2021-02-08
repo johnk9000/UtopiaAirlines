@@ -1,5 +1,6 @@
 package com.smoothstack.spring.utopia.service;
 
+import com.smoothstack.spring.utopia.entity.Airport;
 import com.smoothstack.spring.utopia.entity.Flight;
 import com.smoothstack.spring.utopia.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class FlightService {
 
     public Flight createFlight(Flight flight)
     {
+        if(flight.getFilledSeats() < 0)
+            throw new IllegalArgumentException();
         return flightRepository.save(flight);
     }
 

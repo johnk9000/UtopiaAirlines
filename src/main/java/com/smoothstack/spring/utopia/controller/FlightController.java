@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/flight")
@@ -47,9 +48,15 @@ public class FlightController {
     public ResponseEntity<Long> createFlight(@Valid @RequestBody FlightDto flightDto)
     {
         FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportService, airplaneService);
-        Flight flight = flightDtoMapper.map(flightDto);
-        Flight createdFlight = flightService.createFlight(flight);
-        return ResponseEntity.status(201).body(createdFlight.getId());
+        try {
+            Flight flight = flightDtoMapper.map(flightDto);
+            Flight createdFlight = flightService.createFlight(flight);
+            return ResponseEntity.status(201).body(createdFlight.getId());
+        }
+        catch(NoSuchElementException | IllegalArgumentException e){
+            return ResponseEntity.notFound().build();
+         }
+
     }
 
     @PutMapping("/{id}")
@@ -59,9 +66,10 @@ public class FlightController {
             return ResponseEntity.badRequest().body(Map.of("message", "Flight ID is required for update"));
 
         FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportService, airplaneService);
-        Flight flightToUpdate = flightDtoMapper.map(flightDto);
-        flightToUpdate.setId(id);
+
         try{
+            Flight flightToUpdate = flightDtoMapper.map(flightDto);
+            flightToUpdate.setId(id);
             Flight updatedFlight = flightService.updateFlight(flightToUpdate);
             return ResponseEntity.ok(updatedFlight);
         }
