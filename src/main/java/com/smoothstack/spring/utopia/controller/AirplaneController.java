@@ -7,6 +7,7 @@ import com.smoothstack.spring.utopia.mapper.AirplaneDtoMapper;
 import com.smoothstack.spring.utopia.mapper.FlightDtoMapper;
 import com.smoothstack.spring.utopia.service.AirplaneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +16,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/airplane")
+@RequestMapping("/airplanes")
 public class AirplaneController {
 
     @Autowired
     private AirplaneService airplaneService;
 
-    @GetMapping({"/{id}"})
+    @GetMapping(value = {"/{id}"}, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Airplane> getAirplaneById(@PathVariable Long id)
     {
         return ResponseEntity.of(airplaneService.getAirplaneById(id));
     }
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Airplane>> getAllAirplanes()
     {
         List<Airplane> planes = airplaneService.getAllAirplanes();
@@ -37,7 +38,7 @@ public class AirplaneController {
         return ResponseEntity.ok(planes);
     }
 
-    @PostMapping
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Long> createAirplane(@Valid @RequestBody AirplaneDto airplaneDto)
     {
         AirplaneDtoMapper airplaneDtoMapper= new AirplaneDtoMapper();
@@ -47,7 +48,7 @@ public class AirplaneController {
 
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> updateAirplane(@PathVariable Long id, @Valid @RequestBody AirplaneDto airplaneDto)
     {
         if (id == null)

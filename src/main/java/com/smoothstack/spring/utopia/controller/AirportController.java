@@ -7,6 +7,7 @@ import com.smoothstack.spring.utopia.mapper.AirplaneDtoMapper;
 import com.smoothstack.spring.utopia.mapper.AirportDtoMapper;
 import com.smoothstack.spring.utopia.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +16,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/airport")
+@RequestMapping("/airports")
 public class AirportController {
 
     @Autowired
     private AirportService airportService;
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Airport> getAirportById(@PathVariable Long id)
     {
         return ResponseEntity.of(airportService.getAirportById(id));
     }
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Airport>> getAllAirports()
     {
         List<Airport> airports = airportService.getAllAirports();
@@ -37,7 +38,7 @@ public class AirportController {
         return ResponseEntity.ok(airports);
     }
 
-    @PostMapping
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Long> createAirport(@Valid @RequestBody AirportDto airportDto)
     {
         AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
@@ -46,7 +47,7 @@ public class AirportController {
         return ResponseEntity.status(201).body(createdAirport.getId());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> updateAirport(@PathVariable Long id, @Valid @RequestBody AirportDto airportDto)
     {
         if (id == null)
